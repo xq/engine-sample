@@ -1,0 +1,50 @@
+!!!
+%html
+  %head
+    %meta{content: "text/html; charset=utf-8", "http-equiv" => "Content-type"}/
+    %title
+      Course Complete
+    = stylesheet_link_tag  "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+    :css
+      #certificate-icon {
+        margin: auto;
+        width: 200px;
+        heigt: 100px;
+        border: 1px solid #F2F1EB;
+      }
+    :javascript
+      $(document).ready(function(){
+        $("#certificate-icon").hover(function(){
+          $(this).css('border', '1px dashed blue');
+        }, function(){
+          $(this).css('border', '1px solid #F2F1EB');
+        });
+      });
+
+    %link{href:'https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all', rel: 'stylesheet', type: 'text/css'}
+      %body
+        %div{style: "background-color: #256772; height: 46px;"}
+          %img{class: "logo-default", src: "/assets/autopilot_logo.png", style: "position: absolute; top: 16px; left: 20px;"}
+        #ap_wrapper
+          #ap_body
+            #ap_content
+              %div{style: "width: 700px; text-align: center; margin: auto;"}
+                %span{style: "font-size: 30px;"}
+                  You have successfully completed the course
+                %span{style: "margin-left: 10px; font-size: 34px; color: green;"}
+                  &#x2713;
+                %div{style: "clear: both; font-size: 18px;"}
+                  %div
+                    Click
+                    %a{href: "certificate?user=#{params[:user]}&course=#{params[:course]}"}
+                      here
+                    to download your certificate of completion
+                  #certificate-icon
+                    %a{href: "certificate?user=#{params[:user]}&course=#{params[:course]}"}
+                      %img{src: "/assets/pdf-certificate.png"}
+                .clear
+                %div
+                  %a{href: "../../admin/login", style: "font-size: 20px;"}
+                    Click here to login to autopilot and view your tasks

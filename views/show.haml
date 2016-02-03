@@ -1,0 +1,5 @@
+
+- if @course.complete?
+  You have already successfully completed this course. If you have not taken this course before, contact your administrator for further support.
+- else
+  %iframe{src: @course.course_url}

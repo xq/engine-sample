@@ -1,0 +1,50 @@
+:javascript
+  $(document).ready(function(){
+    (function pollTraining(){
+       setTimeout(function(){
+           $.ajax({
+               type: 'post',
+               data: {
+                      'id': '#{@course.id}',
+                    },  
+               url: '../status',
+               success: function( response ){
+                   // check response
+                  if(response.response == "incomplete"){
+                    pollTraining();
+                  } else if(response.response == "complete"){
+                    var redirectUrl = "#{CONFIG_DATA[:host]}/training/courses/complete?user=#{@tasks_user.user.id}&course=#{@course.id}";
+                    $(location).attr("href", redirectUrl);
+                  } 
+               },  
+               error: function(request, textStatus, error){
+               }   
+           }); 
+       }, 2000);
+    })();
+  });
+
+
+!!!
+%html
+  %head
+    %meta{content: "text/html; charset=utf-8", "http-equiv" => "Content-type"}/
+    %title
+      Course Complete
+    = stylesheet_link_tag  "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+    %link{href:'https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all', rel: 'stylesheet', type: 'text/css'}
+      %body
+        %div{style: "background-color: #256772; height: 46px;"}
+          %img{class: "logo-default", src: "/assets/autopilot_logo.png", style: "position: absolute; top: 16px; left: 20px;"}
+        #ap_wrapper
+          #ap_body
+            #ap_content
+              .training{style: "1px solid black, width: 100%; text-align: center;"}
+                %span{style: "font-size: 18px; font-weight: bold; margin: 10px 0; display: block;"}
+                  AutoPilot Training Module for Task: #{@task.name}
+                .clear
+                %div{style: "margin: auto; width: 100%;"}
+                  %iframe{width: 1000, height: 700, sandbox: "allow-forms allow-popups allow-pointer-lock allow-same-origin allow-scripts",
+                  src: @course_url }
