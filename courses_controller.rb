@@ -18,16 +18,6 @@ module Training
       render text: "ok", status: 200 and return
     end
 
-    def status
-      response = { response: "error" }
-      if params[:id]
-        course = Course.where(id: params[:id]).first
-        render json: response and return unless course
-        response[:response] = course.complete? ? "complete" : "incomplete"
-      end
-      render json: response
-    end
-
     def new
       action = ActionButton.find_by_key(params[:key])
       @tasks_user = TasksUser.where(id: action.tasks_user_id).first
@@ -42,6 +32,16 @@ module Training
 			tasks_user_ids = TasksUser.where(user_id: current_user.id).map {|tu| tu.id}
       @course = Course.where(course_id: params[:course_id]).where('tasks_user_id IN (?)', tasks_user_ids)
       render :show
+    end
+
+    def status
+      response = { response: "error" }
+      if params[:id]
+        course = Course.where(id: params[:id]).first
+        render json: response and return unless course
+        response[:response] = course.complete? ? "complete" : "incomplete"
+      end
+      render json: response
     end
 
     def certificate
